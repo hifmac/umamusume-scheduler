@@ -281,12 +281,12 @@ const template = {
             "forEach:month": "{{ MONTH }}",
             "div": {
                 "forEach:week": "{{ WEEK }}",
-                "if": "{{ hasGroup(getRaceGroupByMonth(month, week)) }}",
+                "if": "{{ hasGroup(RACE_GROUP_BY_MONTH[sub(month, 1)][sub(week, 1)]) }}",
                 "label.col-1": {
                     "once:textContent": "{{ month }}月{{ WEEK_TEXT[sub(week, 1)] }}"
                 },
                 "select.col-2": {
-                    "forEach:group": "{{ getRaceGroupByMonth(month, week) }}",
+                    "forEach:group": "{{ RACE_GROUP_BY_MONTH[sub(month, 1)][sub(week, 1)] }}",
                     "once:name": "race",
                     "option": {
                         "forEach:race": "{{ group }}",
@@ -310,26 +310,24 @@ const data = {
     MONTH: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
     WEEK: [ 1, 2 ],
     WEEK_TEXT: [ '前半', '後半' ],
+    RACE_GROUP_BY_MONTH: (() => {
+        const month = [];
+        while (month.length < 12) {
+            month.push([ [ [], [], [] ], [ [], [], [] ] ]);
+        }
+        for (const race of RACE) {            
+            for (const year of race.year) {
+                month[race.month - 1][race.week - 1][year - 1].push(race);
+            }
+        }
+        return month;    
+    })(),
     hasGroup(group) {
         let numGroup = 0;
         for (const month of group) {
             numGroup += month.length;
         }
         return 0 < numGroup;
-    },
-    getRaceGroupByMonth(month, week) {
-        const ret = [];
-        while (ret.length < 3) {
-            ret.push([])
-        }
-        for (const race of RACE) {
-            if (race.month === month && race.week == week) {
-                for (const year of race.year) {
-                    ret[year - 1].push(race);
-                }
-            }
-        }
-        return ret
     },
     getRaceName(race) {
         const title = [];
