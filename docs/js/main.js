@@ -207,15 +207,15 @@ const template = {
                 "once:textContent": "/"
             },
             "label#label-junior": {
-                "once:class": "col-3 center",
+                "once:class": "col-2 center",
                 "once:textContent": "1年目"
             },
             "label#label-classic": {
-                "once:class": "col-3 mx-auto",
+                "once:class": "col-2 mx-auto",
                 "once:textContent": "2年目"
             },
             "label#label-senior": {
-                "once:class": "col-3 center",
+                "once:class": "col-2 center",
                 "once:textContent": "3年目"
             },
         },
@@ -223,10 +223,11 @@ const template = {
             "forEach:month": "{{ [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ] }}",
             "div": {
                 "forEach:week": "{{ [ 1, 2 ] }}",
+                "if": "{{ hasGroup(getRaceGroupByMonth(month, week)) }}",
                 "label.col-1": {
                     "once:textContent": "{{ month }}月{{ WEEK_TEXT[sub(week, 1)] }}"
                 },
-                "select.col-3": {
+                "select.col-2": {
                     "forEach:group": "{{ getRaceGroupByMonth(month, week) }}",
                     "option": {
                         "forEach:race": "{{ group }}",
@@ -244,6 +245,13 @@ const adelite = new Adelite('#app', template);
 
 const data = {
     WEEK_TEXT: [ '前半', '後半' ],
+    hasGroup(group) {
+        let numGroup = 0;
+        for (const month of group) {
+            numGroup += month.length;
+        }
+        return 0 < numGroup;
+    },
     getRaceGroupByMonth(month, week) {
         const ret = [];
         while (ret.length < 3) {
