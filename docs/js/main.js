@@ -17,6 +17,9 @@ const RACE = [
         year: [ 3 ],
         factor: [ "パワー" ],
         ability: [ "冬ウマ娘" ],
+        track: [ "ダート" ],
+        distance: [ "1600m" ],
+        course: [ "東京" ],
     },
     {
         name: "大阪杯　",
@@ -25,6 +28,9 @@ const RACE = [
         year: [ 3 ],
         factor: [ "根性" ],
         ability: [ "根幹距離" ],
+        track: [ "芝" ],
+        distance: [ "2000m" ],
+        course: [ "大阪" ],
     },
     {
         name: "高松宮記念",
@@ -33,6 +39,9 @@ const RACE = [
         year: [ 3 ],
         factor: [ "スピード" ],
         ability: [ "中京レース場" ],
+        track: [ "芝" ],
+        distance: [ "1200m" ],
+        course: [ "中京" ],
     },
     {
         name: "皐月賞",
@@ -41,6 +50,9 @@ const RACE = [
         year: [ 2 ],
         factor: [ "パワー" ],
         ability: [ "中山レース場" ],
+        track: [ "芝" ],
+        distance: [ "2000m" ],
+        course: [ "中山" ],
     },
     {
         name: "桜花賞",
@@ -49,6 +61,9 @@ const RACE = [
         year: [ 2 ],
         factor: [ "根性" ],
         ability: [ "阪神レース場" ],
+        track: [ "芝" ],
+        distance: [ "1600m" ],
+        course: [ "阪神" ],
     },
     {
         name: "天皇賞春",
@@ -57,6 +72,9 @@ const RACE = [
         year: [ 3 ],
         factor: [ "スタミナ" ],
         ability: [ "春ウマ娘" ],
+        track: [ "芝" ],
+        distance: [ "3200m" ],
+        course: [ "京都" ],
     },
     {
         name: "ヴィクトリアマイル",
@@ -65,6 +83,9 @@ const RACE = [
         year: [ 3 ],
         factor: [ "スピード", "パワー" ],
         ability: [ ],
+        track: [ "芝" ],
+        distance: [ "１600m" ],
+        course: [ "東京" ],
     },
     {
         name: "NHKマイルC",
@@ -73,6 +94,9 @@ const RACE = [
         year: [ 2 ],
         factor: [ "スピード", "パワー" ],
         ability: [ ],
+        track: [ "芝" ],
+        distance: [ "1600m" ],
+        course: [ "東京" ],
     },
     {
         name: "日本ダービー",
@@ -81,6 +105,9 @@ const RACE = [
         year: [ 2 ],
         factor: [ "根性" ],
         ability: [ "東京レース場" ],
+        track: [ "芝" ],
+        distance: [ "2400m" ],
+        course: [ "東京" ],
     },
     {
         name: "オークス",
@@ -89,6 +116,9 @@ const RACE = [
         year: [ 2 ],
         factor: [ "スタミナ" ],
         ability: [ "東京レース場" ],
+        track: [ "芝" ],
+        distance: [ "2400m" ],
+        course: [ "東京" ],
     },
     {
         name: "安田記念",
@@ -97,6 +127,9 @@ const RACE = [
         year: [ 2, 3 ],
         factor: [ "スピード" ],
         ability: [ "東京レース場" ],
+        track: [ "芝" ],
+        distance: [ "1600m" ],
+        course: [ "東京" ],
     },
     {
         name: "帝王賞",
@@ -105,6 +138,9 @@ const RACE = [
         year: [ 3 ],
         factor: [ "スピード" ],
         ability: [ "東京レース場" ],
+        track: [ "ダート" ],
+        distance: [ "2000m" ],
+        course: [ "大井" ],
     },
     {
         name: "宝塚記念",
@@ -113,6 +149,9 @@ const RACE = [
         year: [ 2, 3 ],
         factor: [ "根性" ],
         ability: [ "夏ウマ娘" ],
+        track: [ "芝" ],
+        distance: [ "2200m" ],
+        course: [ "阪神" ],
     },
     {
         name: "ジャパンダート",
@@ -121,6 +160,9 @@ const RACE = [
         year: [ 2 ],
         factor: [ ],
         ability: [ "ダート" ],
+        track: [ "ダート" ],
+        distance: [ "2000m" ],
+        course: [ "大井" ],
     },
     {
         name: "スプリンターズS",
@@ -129,6 +171,9 @@ const RACE = [
         year: [ 2, 3 ],
         factor: [ "スピード", "パワー" ],
         ability: [ "根幹距離" ],
+        track: [ "芝" ],
+        distance: [ "1200m" ],
+        course: [ "中山" ],
     },
     {
         name: "天皇賞秋",
@@ -137,6 +182,9 @@ const RACE = [
         year: [ 3 ],
         factor: [ "スピード" ],
         ability: [ "秋ウマ娘" ],
+        track: [ "芝" ],
+        distance: [ "2000m" ],
+        course: [ "東京" ],
     },
     {
         name: "菊花賞",
@@ -145,6 +193,9 @@ const RACE = [
         year: [ 2 ],
         factor: [ "スタミナ" ],
         ability: [ "京都レース場" ],
+        track: [ "芝" ],
+        distance: [ "3000m" ],
+        course: [ "京都" ],
     },
     {
         name: "秋華賞",
@@ -153,6 +204,9 @@ const RACE = [
         year: [ 3 ],
         factor: [ "賢さ" ],
         ability: [ "京都レース場" ],
+        track: [ "芝" ],
+        distance: [ "2000m" ],
+        course: [ "京都" ],
     },
     {
         name: "JCBクラシック",
@@ -161,6 +215,9 @@ const RACE = [
         year: [ 2, 3 ],
         factor: [ "スタミナ", "根性" ],
         ability: [ ],
+        track: [ "ダート" ],
+        distance: [ "2000m" ],
+        course: [ "大井" ],
     },
     {
         name: "JCBスプリント",
@@ -169,6 +226,9 @@ const RACE = [
         year: [ 2, 3 ],
         factor: [ "パワー", "根性" ],
         ability: [ ],
+        track: [ "ダート" ],
+        distance: [ "1200m" ],
+        course: [ "大井" ],
     },
     {
         name: "JCBレディス",
@@ -177,6 +237,9 @@ const RACE = [
         year: [ 2, 3 ],
         factor: [ "スピード", "根性" ],
         ability: [ ],
+        track: [ "ダート" ],
+        distance: [ "1800m" ],
+        course: [ "大井" ],
     },
     {
         name: "エリザベス女王",
@@ -185,6 +248,9 @@ const RACE = [
         year: [ 2, 3 ],
         factor: [ "スタミナ" ],
         ability: [ "非根幹距離" ],
+        track: [ "芝" ],
+        distance: [ "2200m" ],
+        course: [ "京都" ],
     },
     {
         name: "ジャパンC",
@@ -193,6 +259,9 @@ const RACE = [
         year: [ 2, 3 ],
         factor: [ "スタミナ" ],
         ability: [ "東京レース場" ],
+        track: [ "芝" ],
+        distance: [ "2400m" ],
+        course: [ "東京" ],
     },
     {
         name: "マイルCS",
@@ -201,14 +270,20 @@ const RACE = [
         year: [ 2, 3 ],
         factor: [ "スピード" ],
         ability: [ "根幹距離" ],
+        track: [ "芝" ],
+        distance: [ "1600m" ],
+        course: [ "京都" ],
     },
     {
-        name: "チャンピオンズ",
+        name: "チャンピオンズC",
         month: 12,
         week: 1,
         year: [ 2, 3 ],
         factor: [ "パワー" ],
         ability: [ "中京レース場"  ],
+        track: [ "ダート" ],
+        distance: [ "1800m" ],
+        course: [ "中京" ],
     },
     {
         name: "朝日杯FS",
@@ -217,6 +292,9 @@ const RACE = [
         year: [ 1 ],
         factor: [ "スピード", "根性" ],
         ability: [  ],
+        track: [ "芝" ],
+        distance: [ "1600m" ],
+        course: [ "阪神" ],
     },
     {
         name: "阪神ジュベナイ",
@@ -225,6 +303,9 @@ const RACE = [
         year: [ 1 ],
         factor: [ "スピード", "パワー" ],
         ability: [  ],
+        track: [ "芝" ],
+        distance: [ "1600m" ],
+        course: [ "阪神" ],
     },
     {
         name: "東京大賞典",
@@ -233,6 +314,9 @@ const RACE = [
         year: [ 3 ],
         factor: [  ],
         ability: [ "ダート" ],
+        track: [ "ダート" ],
+        distance: [ "2000m" ],
+        course: [ "大井" ],
     },
     {
         name: "有馬記念",
@@ -241,6 +325,9 @@ const RACE = [
         year: [ 3 ],
         factor: [ "根性" ],
         ability: [ "中山レース場" ],
+        track: [ "芝" ],
+        distance: [ "2500m" ],
+        course: [ "中山" ],
     },
     {
         name: "ホープフルS",
@@ -249,6 +336,9 @@ const RACE = [
         year: [ 1 ],
         factor: [ "スピード", "スタミナ" ],
         ability: [  ],
+        track: [ "芝" ],
+        distance: [ "2000m" ],
+        course: [ "中山" ],
     }
 ];
 
