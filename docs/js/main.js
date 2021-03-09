@@ -368,7 +368,7 @@ const data = {
         for (const f in factors) {
             summary.push(f + 'x' + factors[f]);
         }
-        return '因子：' + summary.join(', ') + ' / 特能：' + Array.from(abilities).join('〇, ') + '〇';
+        return '因子：' + summary.join(', ') + ' / 特能：' + Array.from(abilities).sort().join('〇, ') + '〇';
     }
 };
 
