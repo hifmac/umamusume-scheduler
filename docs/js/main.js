@@ -22,7 +22,7 @@ const RACE = [
         course: "東京",
     },
     {
-        name: "大阪杯　",
+        name: "大阪杯",
         month: 3,
         week: 2,
         year: [ 3 ],
@@ -342,6 +342,42 @@ const RACE = [
     }
 ];
 
+const RACE_GROUP_BY_MONTH = (() => {
+    const month = [];
+    while (month.length < 12) {
+        month.push([ [ [], [], [] ], [ [], [], [] ] ]);
+    }
+    for (const race of RACE) {            
+        for (const year of race.year) {
+            month[race.month - 1][race.week - 1][year - 1].push(race);
+        }
+    }
+
+    for (const m of month) {
+        for (const w of m) {
+            for (const races of w) {
+                if (races.length) {
+                    races.unshift({
+                        name: "お休み",
+                        month: m,
+                        week: w,
+                        year: [ 1, 2, 3 ],
+                        factor: [],
+                        ability: [],
+                        track: null,
+                        distance: null,
+                        course: null,
+                    });
+                }
+            }
+        }
+    }
+
+    return month;    
+})();
+
+
+
 const template = {
     "div": {
         "div.title": {
@@ -409,18 +445,7 @@ const data = {
     MONTH: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
     WEEK: [ 1, 2 ],
     WEEK_TEXT: [ '前半', '後半' ],
-    RACE_GROUP_BY_MONTH: (() => {
-        const month = [];
-        while (month.length < 12) {
-            month.push([ [ [], [], [] ], [ [], [], [] ] ]);
-        }
-        for (const race of RACE) {            
-            for (const year of race.year) {
-                month[race.month - 1][race.week - 1][year - 1].push(race);
-            }
-        }
-        return month;    
-    })(),
+    RACE_GROUP_BY_MONTH,
 
     hasGroup(group) {
         let numGroup = 0;
@@ -437,8 +462,11 @@ const data = {
         }       
         for (const ability of race.ability) {
             title.push(ability + '〇');
-        }   
-        return `${race.name}(${ title.join('\n') })`;
+        }
+        if (title.length) {
+            return `${race.name}(${ title.join('\n') })`;
+        }
+        return race.name;
     },
 
     onUpdated(month, week, race) {
@@ -446,7 +474,6 @@ const data = {
     },
 
     getRaceClass(raceName) {
-        console.log(raceName)
         for (const race of RACE) {
             if (race.name == raceName) {
                 switch (race.track) {
@@ -488,7 +515,7 @@ const data = {
         }
         return [
             '因子：' + summary.join(', '),
-            '特能：' + Array.from(abilities).sort().join('〇, ') + '〇'
+            '特能：' + Array.from(abilities).sort().join('〇, ') + (abilities.size ? '〇' : '')
         ];
     }
 };
