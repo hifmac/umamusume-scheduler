@@ -350,32 +350,34 @@ const template = {
                 "once:textContent": "ウマ娘スケジューラ"
             },
         },
-        "div.header": {
+        "div.header-left": {
             "label.col-1": {
                 "once:textContent": "/"
             },
             "label#label-junior": {
-                "once:class": "col-2 center",
+                "once:class": "col-2 mr-2 text-center",
                 "once:textContent": "1年目"
             },
             "label#label-classic": {
-                "once:class": "col-2 mx-auto",
+                "once:class": "col-2 mr-2 text-center",
                 "once:textContent": "2年目"
             },
             "label#label-senior": {
-                "once:class": "col-2 center",
+                "once:class": "col-2 mr-2 text-center",
                 "once:textContent": "3年目"
             },
         },
-        "div.table": {
+        "div.border": {
             "forEach:month": "{{ MONTH }}",
-            "div": {
+            "div.row": {
                 "forEach:week": "{{ WEEK }}",
                 "if": "{{ hasGroup(RACE_GROUP_BY_MONTH[sub(month, 1)][sub(week, 1)]) }}",
-                "label.col-1": {
+                "label#left": {
+                    "once:class": "col-1 text-right",
                     "once:textContent": "{{ month }}月{{ WEEK_TEXT[sub(week, 1)] }}"
                 },
-                "select.col-2": {
+                "select": {
+                    "once:class": "col-2 mr-2",
                     "forEach:group": "{{ RACE_GROUP_BY_MONTH[sub(month, 1)][sub(week, 1)] }}",
                     "once:name": "race",
                     "option": {
@@ -384,11 +386,18 @@ const template = {
                         "once:textContent": "{{ getRaceName(race) }}",
                     },
                     "on:change": "{{ onUpdated(month, week, getAttribute('value')) }}"
-                }
+                },
+                "label#right": {
+                    "once:class": "col-1 text-left",
+                    "once:textContent": "{{ month }}月{{ WEEK_TEXT[sub(week, 1)] }}"
+                },
             }
         },
         "div.summary": {
-            "bind:textContent": "{{ summarize() }}"
+            "div.ml-2": {
+                "forEach:summary": "{{ summarize() }}",
+                "bind:textContent": "{{ summary }}"
+            }
         }
     }
 };
@@ -458,7 +467,10 @@ const data = {
         for (const f in factors) {
             summary.push(f + 'x' + factors[f]);
         }
-        return '因子：' + summary.join(', ') + ' / 特能：' + Array.from(abilities).sort().join('〇, ') + '〇';
+        return [
+            '因子：' + summary.join(', '),
+            '特能：' + Array.from(abilities).sort().join('〇, ') + '〇'
+        ];
     }
 };
 
