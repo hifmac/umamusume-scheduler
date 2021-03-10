@@ -1,6 +1,6 @@
 /**
- * @file texture-preview.js
- * @description Texture Preview view
+ * @file main.js
+ * @description umamusume scheduler
  * @author hifmac(E328456 of the Frea server)
  * @copyright (c) 2021 hifmac
  * @license MIT-License
@@ -8,6 +8,33 @@
 'use strict';
 
 import Adelite from 'https://hifmac.github.io/bgr-scene-player-renderer/js/sandica/adelite.js';
+import { Save } from './save.js'
+
+const makeRace = (name, year) => {
+    return { name, year };
+}
+
+const UMAMUSUME = [
+    {
+        name: "ハルウララ",
+        race: [ 
+            makeRace("フェブラリーS", [ 3 ]),
+            makeRace("JBCスプリント", [ 3 ]),
+            makeRace("有馬記念", [ 3 ]),
+        ]
+    },
+    {
+        name: "テイエムオペラオー",
+        race: [
+            makeRace("皐月賞", [ 2 ]),
+            makeRace("日本ダービー", [ 2 ]),
+            makeRace("有馬記念", [ 2, 3 ]),
+            makeRace("天皇賞春", [ 3 ]),
+            makeRace("宝塚記念", [ 3 ]),
+            makeRace("ジャパンC", [ 3 ]),
+        ]
+    }
+]
 
 const RACE = [
     {
@@ -209,7 +236,7 @@ const RACE = [
         course: "京都",
     },
     {
-        name: "JCBクラシック",
+        name: "JBCクラシック",
         month: 11,
         week: 1,
         year: [ 2, 3 ],
@@ -220,7 +247,7 @@ const RACE = [
         course: "大井",
     },
     {
-        name: "JCBスプリント",
+        name: "JBCスプリント",
         month: 11,
         week: 1,
         year: [ 2, 3 ],
@@ -231,7 +258,7 @@ const RACE = [
         course: "大井",
     },
     {
-        name: "JCBレディス",
+        name: "JBCレディス",
         month: 11,
         week: 1,
         year: [ 2, 3 ],
@@ -342,42 +369,6 @@ const RACE = [
     }
 ];
 
-const RACE_GROUP_BY_MONTH = (() => {
-    const month = [];
-    while (month.length < 12) {
-        month.push([ [ [], [], [] ], [ [], [], [] ] ]);
-    }
-    for (const race of RACE) {            
-        for (const year of race.year) {
-            month[race.month - 1][race.week - 1][year - 1].push(race);
-        }
-    }
-
-    for (const m of month) {
-        for (const w of m) {
-            for (const races of w) {
-                if (races.length) {
-                    races.unshift({
-                        name: "お休み",
-                        month: m,
-                        week: w,
-                        year: [ 1, 2, 3 ],
-                        factor: [],
-                        ability: [],
-                        track: null,
-                        distance: null,
-                        course: null,
-                    });
-                }
-            }
-        }
-    }
-
-    return month;    
-})();
-
-
-
 const template = {
     "div": {
         "div.title": {
@@ -385,6 +376,16 @@ const template = {
             "label": {
                 "once:textContent": "ウマ娘スケジューラ"
             },
+        },
+        "div.umamusume": {
+            "select": {
+                "option": {
+                    "forEach:umamusume": "{{ UMAMUSUME }}",
+                    "once:value": "{{ umamusume.name }}",
+                    "once:textContent": "{{ umamusume.name }}",
+                },
+                "on:change": "{{ onUmamusumeChanged(getAttribute('selectedIndex')) }}"
+            }
         },
         "div.header-left": {
             "label.col-1": {
@@ -413,18 +414,19 @@ const template = {
                     "once:textContent": "{{ month }}月{{ WEEK_TEXT[sub(week, 1)] }}"
                 },
                 "div": {
-                    "forEach:group": "{{ RACE_GROUP_BY_MONTH[sub(month, 1)][sub(week, 1)] }}",
+                    "forEach:year": "{{ YEAR }}",
                     "once:class": "col-2",
                     "select": {
-                        "if": "{{ group.length }}",
+                        "if": "{{ RACE_GROUP_BY_MONTH[sub(month, 1)][sub(week, 1)][sub(year, 1)].length }}",
+                        "bind:selectedIndex": "{{ selectedIndex[sub(month, 1)][sub(week, 1)][sub(year, 1)] }}",
                         "bind:class": "w-100 mr-2 {{ getRaceClass(getAttribute('value')) }}",
                         "once:name": "race",
                         "option": {
-                            "forEach:race": "{{ group }}",
+                            "forEach:race": "{{ RACE_GROUP_BY_MONTH[sub(month, 1)][sub(week, 1)][sub(year, 1)] }}",
                             "once:value": "{{ race.name }}",
                             "once:textContent": "{{ getRaceName(race) }}",
                         },
-                        "on:change": "{{ onUpdated(month, week, getAttribute('value')) }}"
+                        "on:change": "{{ onRaceUpdated(month, week, year, getAttribute('selectedIndex')) }}"
                     },    
                 },
                 "label#right": {
@@ -438,6 +440,12 @@ const template = {
                 "forEach:summary": "{{ summarize() }}",
                 "bind:textContent": "{{ summary }}"
             }
+        },
+        "div.memo": {
+            "textarea.col-8": {
+                "bind:value": "{{ memo }}",
+                "on:input": "{{ onMemoInput(getAttribute('value')) }}"
+            }
         }
     }
 };
@@ -445,11 +453,34 @@ const template = {
 /** @type {import('../../../bgr-scene-player/renderer/docs/js/sandica/adelite.js').default} */
 const adelite = new Adelite('#app', template);
 
+const saveFile = new Save();
+
 const data = {
     MONTH: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
     WEEK: [ 1, 2 ],
+    YEAR: [ 1, 2, 3],
     WEEK_TEXT: [ '前半', '後半' ],
-    RACE_GROUP_BY_MONTH,
+    UMAMUSUME,
+    RACE,
+    RACE_GROUP_BY_MONTH: (() => {
+        const month = [];
+        while (month.length < 12) {
+            month.push([ [ [], [], [] ], [ [], [], [] ] ]);
+        }
+        return month;    
+    })(),
+
+    umamusume: UMAMUSUME[0],
+
+    selectedIndex: (() => {
+        const ret = []
+        while (ret.length < 12) {
+            ret.push([ [ 0, 0, 0 ], [ 0, 0, 0 ] ]);
+        }
+        return ret;
+    })(),
+
+    memo: "",
 
     hasGroup(group) {
         let numGroup = 0;
@@ -476,8 +507,13 @@ const data = {
         return race.name;
     },
 
-    onUpdated(month, week, race) {
-        adelite.update();
+    getRaceByName(name) {
+        for (const race of RACE) {
+            if (race.name === name) {
+                return race;
+            }
+        }
+        return null;
     },
 
     getRaceClass(raceName) {
@@ -492,6 +528,74 @@ const data = {
             }
         }
         return 'bg-transparent';
+    },
+
+    onUmamusumeChanged(index) {
+        this.umamusume = UMAMUSUME[index];
+
+        const races = [];
+
+        // make empty race
+        while (races.length < 12) {
+            races.push([ [ [], [], [] ], [ [], [], [] ] ]);
+        }
+
+        // register all race
+        for (const race of RACE) {            
+            for (const year of race.year) {
+                races[race.month - 1][race.week - 1][year - 1].push(race);
+            }
+        }
+
+        // add rest 
+        for (const month of races) {
+            for (const week of month) {
+                for (const race_list of week) {
+                    if (race_list.length) {
+                        race_list.unshift({
+                            name: "お休み",
+                            month: race_list[0].month,
+                            week: race_list[0].week,
+                            year: [ 1, 2, 3 ],
+                            factor: [],
+                            ability: [],
+                            track: null,
+                            distance: null,
+                            course: null,
+                        });
+                    }
+                }
+            }
+        }
+
+        // override required races
+        for (const race of this.umamusume.race) {
+            const r = this.getRaceByName(race.name);
+            if (r) {
+                for (const year of race.year) {
+                    races[r.month - 1][r.week - 1][year - 1] = [ r ];
+                }
+            }
+        }
+
+        this.RACE_GROUP_BY_MONTH = races;
+
+        this.load().then(() => {
+            adelite.update()
+        }).catch((e) => {
+            console.log(e);
+        });
+    },
+
+    onRaceUpdated(month, week, year, index) {
+        data.selectedIndex[month - 1][week - 1][year - 1] = index;
+        adelite.update();
+        this.save();
+    },
+
+    onMemoInput(memo) {
+        data.memo = memo;
+        this.save();
     },
 
     summarize() {
@@ -524,9 +628,32 @@ const data = {
             '因子：' + summary.join(', '),
             '特能：' + Array.from(abilities).sort().join('〇, ') + (abilities.size ? '〇' : '')
         ];
+    },
+
+    save() {
+        saveFile.save({
+            id: this.umamusume.name,
+            selectedIndex: this.selectedIndex,
+            memo: this.memo
+        })
+    },
+
+    load() {
+        return new Promise((resolve, reject) => {
+            saveFile.load(this.umamusume.name).then((value) => {
+                this.selectedIndex = value.selectedIndex;
+                this.memo = value.memo;
+                resolve();
+            }).catch(reject);
+        });
     }
 };
 
 window.onload = () => {
-    adelite.show(data);
+    saveFile.init().then(() => { 
+        adelite.show(data);
+        data.onUmamusumeChanged(0);
+    }).catch((e) => {
+        console.log(e);
+    });
 };
