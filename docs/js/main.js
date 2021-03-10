@@ -412,16 +412,20 @@ const template = {
                     "once:class": "col-1 text-right",
                     "once:textContent": "{{ month }}月{{ WEEK_TEXT[sub(week, 1)] }}"
                 },
-                "select": {
+                "div": {
                     "forEach:group": "{{ RACE_GROUP_BY_MONTH[sub(month, 1)][sub(week, 1)] }}",
-                    "bind:class": "col-2 mr-2 {{ getRaceClass(getAttribute('value')) }}",
-                    "once:name": "race",
-                    "option": {
-                        "forEach:race": "{{ group }}",
-                        "once:value": "{{ race.name }}",
-                        "once:textContent": "{{ getRaceName(race) }}",
-                    },
-                    "on:change": "{{ onUpdated(month, week, getAttribute('value')) }}"
+                    "once:class": "col-2",
+                    "select": {
+                        "if": "{{ group.length }}",
+                        "bind:class": "w-100 mr-2 {{ getRaceClass(getAttribute('value')) }}",
+                        "once:name": "race",
+                        "option": {
+                            "forEach:race": "{{ group }}",
+                            "once:value": "{{ race.name }}",
+                            "once:textContent": "{{ getRaceName(race) }}",
+                        },
+                        "on:change": "{{ onUpdated(month, week, getAttribute('value')) }}"
+                    },    
                 },
                 "label#right": {
                     "once:class": "col-1 text-left",
