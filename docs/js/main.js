@@ -641,8 +641,10 @@ const data = {
     load() {
         return new Promise((resolve, reject) => {
             saveFile.load(this.umamusume.name).then((value) => {
-                this.selectedIndex = value.selectedIndex;
-                this.memo = value.memo;
+                if (value) {
+                    this.selectedIndex = value.selectedIndex;
+                    this.memo = value.memo;
+                }
                 resolve();
             }).catch(reject);
         });
