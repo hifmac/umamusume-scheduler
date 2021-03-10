@@ -462,7 +462,7 @@ const data = {
     getRaceName(race) {
         const title = [];
         if (race.course && race.distance && race.track) {
-            title.push(`${race.course}${race.distance}m${race.track}`);
+            title.push(`${race.course} ${race.track} ${race.distance}m`);
         }
         for (const factor of race.factor) {
             title.push(factor);
@@ -471,7 +471,7 @@ const data = {
             title.push(ability + '〇');
         }
         if (title.length) {
-            return `${race.name}(${ title.join(' ') })`;
+            return `${race.name}(${ title.join('、') })`;
         }
         return race.name;
     },
